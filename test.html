@@ -1,25 +1,27 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>ETCC Dashboard — Regression Test</title>
+  <title>ETCC Dashboard — Regression Tests</title>
   <style>
     body { font-family: -apple-system, sans-serif; background: #f5f5f7; color: #1d1d1f; padding: 2rem; }
-    h1 { font-size: 1.4rem; margin-bottom: 1.5rem; }
-    table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; }
-    th { background: #dbeafe; text-align: left; padding: 0.6rem 1rem; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    h1 { font-size: 1.4rem; margin-bottom: 0.4rem; }
+    .sub { color: #6e6e73; font-size: 0.875rem; margin-bottom: 1.5rem; }
+    table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+    th { background: #dbeafe; text-align: left; padding: 0.6rem 1rem; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; }
     td { padding: 0.6rem 1rem; border-top: 1px solid #d2d2d7; font-size: 0.9rem; }
     .pass { color: #1a7f37; font-weight: 700; }
     .fail { color: #c62828; font-weight: 700; }
     #summary { margin-top: 1.25rem; font-weight: 700; font-size: 1rem; }
+    #status  { color: #6e6e73; font-size: 0.875rem; margin-bottom: 1rem; }
   </style>
 </head>
 <body>
-  <h1>ETCC Dashboard — Regression Test</h1>
+  <h1>ETCC Dashboard — Regression Tests</h1>
+  <div class="sub">Fetches index.html and validates key DOM elements via DOMParser.</div>
+  <div id="status">Loading index.html...</div>
   <table>
-    <thead>
-      <tr><th>#</th><th>Test</th><th>Result</th><th>Detail</th></tr>
-    </thead>
+    <thead><tr><th>#</th><th>Test</th><th>Result</th><th>Detail</th></tr></thead>
     <tbody id="results"></tbody>
   </table>
   <div id="summary"></div>
@@ -27,157 +29,139 @@
   <script>
     const tests = [
       {
-        name: 'Page title is correct',
-        fn: () => {
-          const t = document.title;
+        name: 'Page title contains ETCC and East Tennessee',
+        fn: doc => {
+          const t = doc.querySelector('title')?.textContent || '';
           return { pass: t.includes('ETCC') && t.includes('East Tennessee'), detail: t };
         }
       },
       {
         name: 'Header logo image present',
-        fn: () => {
-          const img = document.querySelector('header img');
-          return { pass: !!img && img.src.includes('ETCClogo.png'), detail: img ? img.src : 'not found' };
+        fn: doc => {
+          const img = doc.querySelector('header img');
+          return { pass: !!img && img.getAttribute('src')?.includes('ETCClogo'), detail: img ? img.getAttribute('src') : 'not found' };
         }
       },
       {
         name: 'Header title text correct',
-        fn: () => {
-          const el = document.querySelector('.header-title');
+        fn: doc => {
+          const el = doc.querySelector('.header-title');
           return { pass: !!el && el.textContent.includes('East Tennessee Corvette Club'), detail: el ? el.textContent.trim() : 'not found' };
         }
       },
       {
         name: 'Hero logo image present',
-        fn: () => {
-          const img = document.querySelector('.hero-logo');
-          return { pass: !!img && img.src.includes('ETCClogo.png'), detail: img ? img.src : 'not found' };
+        fn: doc => {
+          const img = doc.querySelector('.hero-logo');
+          return { pass: !!img && img.getAttribute('src')?.includes('ETCClogo'), detail: img ? img.getAttribute('src') : 'not found' };
         }
       },
       {
-        name: 'Hero heading present',
-        fn: () => {
-          const el = document.querySelector('.hero h1');
+        name: 'Hero heading contains ETCC Apps',
+        fn: doc => {
+          const el = doc.querySelector('.hero h1');
           return { pass: !!el && el.textContent.includes('ETCC Apps'), detail: el ? el.textContent.trim() : 'not found' };
         }
       },
       {
         name: 'Silent Auction Manager card present',
-        fn: () => {
-          const cards = Array.from(document.querySelectorAll('.card-name'));
+        fn: doc => {
+          const cards = Array.from(doc.querySelectorAll('.card-name'));
           const found = cards.find(c => c.textContent.includes('Silent Auction Manager'));
           return { pass: !!found, detail: found ? found.textContent.trim() : 'not found' };
         }
       },
       {
-        name: 'Silent Auction Manager links to correct URL',
-        fn: () => {
-          const a = document.querySelector('a.app-card');
-          return { pass: !!a && a.href.includes('etccapps.com/apps/sam'), detail: a ? a.href : 'not found' };
+        name: 'SAM card links to etccapps.com/apps/sam',
+        fn: doc => {
+          const a = doc.querySelector('a.app-card');
+          return { pass: !!a && a.getAttribute('href')?.includes('etccapps.com/apps/sam'), detail: a ? a.getAttribute('href') : 'not found' };
         }
       },
       {
-        name: 'Silent Auction Manager badge shows Live',
-        fn: () => {
-          const badge = document.querySelector('.badge-live');
+        name: 'Live badge present on SAM card',
+        fn: doc => {
+          const badge = doc.querySelector('.badge-live');
           return { pass: !!badge && badge.textContent.trim() === 'Live', detail: badge ? badge.textContent.trim() : 'not found' };
         }
       },
       {
         name: 'Coming Soon card present',
-        fn: () => {
-          const card = document.querySelector('.app-card.coming-soon');
-          return { pass: !!card, detail: card ? card.querySelector('.card-name').textContent.trim() : 'not found' };
+        fn: doc => {
+          const card = doc.querySelector('.app-card.coming-soon');
+          return { pass: !!card, detail: card ? card.querySelector('.card-name')?.textContent.trim() : 'not found' };
         }
       },
       {
         name: 'Coming Soon badge present',
-        fn: () => {
-          const badge = document.querySelector('.badge-soon');
+        fn: doc => {
+          const badge = doc.querySelector('.badge-soon');
           return { pass: !!badge && badge.textContent.includes('Coming Soon'), detail: badge ? badge.textContent.trim() : 'not found' };
         }
       },
       {
         name: 'Footer contains etccapps.com',
-        fn: () => {
-          const footer = document.querySelector('footer');
-          return { pass: !!footer && footer.textContent.includes('etccapps.com'), detail: footer ? footer.textContent.trim().substring(0, 60) : 'not found' };
+        fn: doc => {
+          const f = doc.querySelector('footer');
+          return { pass: !!f && f.textContent.includes('etccapps.com'), detail: f ? f.textContent.trim().substring(0, 60) : 'not found' };
         }
       },
       {
-        name: 'Footer copyright year present',
-        fn: () => {
-          const footer = document.querySelector('footer');
-          return { pass: !!footer && footer.textContent.includes('2026'), detail: footer ? '2026 found' : 'not found' };
+        name: 'Footer copyright 2026',
+        fn: doc => {
+          const f = doc.querySelector('footer');
+          return { pass: !!f && f.textContent.includes('2026'), detail: f ? '2026 found' : 'not found' };
+        }
+      },
+      {
+        name: 'Settings nav item present',
+        fn: doc => {
+          const el = doc.getElementById('nav-settings');
+          return { pass: !!el, detail: el ? el.textContent.trim() : 'not found' };
+        }
+      },
+      {
+        name: 'Password modal present',
+        fn: doc => {
+          const el = doc.getElementById('pwModal');
+          return { pass: !!el, detail: el ? 'found' : 'not found' };
+        }
+      },
+      {
+        name: 'Regression test button present in Settings',
+        fn: doc => {
+          const btn = doc.querySelector('#page-settings .btn');
+          return { pass: !!btn && btn.textContent.includes('Regression'), detail: btn ? btn.textContent.trim() : 'not found' };
         }
       }
     ];
 
-    const tbody = document.getElementById('results');
-    let passed = 0;
+    fetch('index.html')
+      .then(r => r.text())
+      .then(html => {
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        document.getElementById('status').textContent = 'Running ' + tests.length + ' tests against index.html...';
 
-    tests.forEach((t, i) => {
-      let result;
-      try { result = t.fn(); } catch(e) { result = { pass: false, detail: e.message }; }
-      if (result.pass) passed++;
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${i+1}</td><td>${t.name}</td><td class="${result.pass ? 'pass' : 'fail'}">${result.pass ? 'PASS' : 'FAIL'}</td><td style="color:#6e6e73">${result.detail}</td>`;
-      tbody.appendChild(tr);
-    });
+        const tbody = document.getElementById('results');
+        let passed = 0;
 
-    const summary = document.getElementById('summary');
-    const total = tests.length;
-    summary.textContent = `${passed} / ${total} tests passed`;
-    summary.style.color = passed === total ? '#1a7f37' : '#c62828';
-  </script>
+        tests.forEach((t, i) => {
+          let result;
+          try { result = t.fn(doc); } catch(e) { result = { pass: false, detail: e.message }; }
+          if (result.pass) passed++;
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${i+1}</td><td>${t.name}</td><td class="${result.pass ? 'pass' : 'fail'}">${result.pass ? 'PASS' : 'FAIL'}</td><td style="color:#6e6e73">${result.detail ?? ''}</td>`;
+          tbody.appendChild(tr);
+        });
 
-  <script>
-    // Load index.html content into an iframe to test against real DOM
-    // Tests run against this page's own DOM after iframe injects content
-  </script>
-
-  <iframe src="index.html" id="target" style="display:none"></iframe>
-  <script>
-    // Re-run tests against the iframe DOM once loaded
-    const iframe = document.getElementById('target');
-    iframe.addEventListener('load', () => {
-      const doc = iframe.contentDocument;
-      tbody.innerHTML = '';
-      let p = 0;
-
-      const iframeTests = tests.map(t => ({
-        name: t.name,
-        fn: () => {
-          // Rebind document-scoped queries to iframe doc
-          const origQ = document.querySelector.bind(document);
-          const origQA = document.querySelectorAll.bind(document);
-          const origTitle = document.title;
-          document.querySelector = doc.querySelector.bind(doc);
-          document.querySelectorAll = doc.querySelectorAll.bind(doc);
-          Object.defineProperty(document, 'title', { get: () => doc.title, configurable: true });
-          let r;
-          try { r = t.fn(); } finally {
-            document.querySelector = origQ;
-            document.querySelectorAll = origQA;
-            Object.defineProperty(document, 'title', { get: () => origTitle, configurable: true });
-          }
-          return r;
-        }
-      }));
-
-      iframeTests.forEach((t, i) => {
-        let result;
-        try { result = t.fn(); } catch(e) { result = { pass: false, detail: e.message }; }
-        if (result.pass) p++;
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${i+1}</td><td>${t.name}</td><td class="${result.pass ? 'pass' : 'fail'}">${result.pass ? 'PASS' : 'FAIL'}</td><td style="color:#6e6e73">${result.detail}</td>`;
-        tbody.appendChild(tr);
+        const summary = document.getElementById('summary');
+        summary.textContent = `${passed} / ${tests.length} tests passed`;
+        summary.style.color = passed === tests.length ? '#1a7f37' : '#c62828';
+        document.getElementById('status').textContent = '';
+      })
+      .catch(err => {
+        document.getElementById('status').textContent = 'Error loading index.html: ' + err.message;
       });
-
-      summary.textContent = `${p} / ${iframeTests.length} tests passed`;
-      summary.style.color = p === iframeTests.length ? '#1a7f37' : '#c62828';
-    });
   </script>
 </body>
 </html>
-

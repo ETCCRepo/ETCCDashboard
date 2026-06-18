@@ -1,71 +1,137 @@
-﻿# Project: ETCC Dashboard
+# Project: ETCC Dashboard
 
 This project uses standard prompts stored in "Z:\Backup\Websites\Web Utilities\StandardPrompts.md"
 
-## Standard Rules (from StandardPrompts.md)
+## What This App Does
 
-- Always read the instructions in "Z:\Backup\Websites\Web Utilities\components\table\readme.md"
-- Always read the instructions in "Z:\Backup\Websites\Web Utilities\components\toolbar\readme.md"
-- Use the palette defined below (overrides StandardPalette.md — ETCC uses blue/white/dark, not gold/brown)
-- Apply the Code Change, Debugging, Regression Protection, and Release Readiness guidelines
-- Always protect existing working features
-- Preserve existing functionality unless explicitly asked to change it
-- Before coding, identify affected files and possible side effects
-- Use the existing project structure and coding style
-- After changes, provide a regression test checklist
-- Do not delete or rewrite large sections unless necessary
-- Always curl the regression test and check the result before reporting a task done
-- Always report when any files are deployed
-- Only commit, push, or deploy when explicitly given a checkpoint command
-- Whenever files are changed, automatically deploy to Hostinger
-- Whenever a checkpoint prompt is given with no description, use a good short name for the changes
-- Instrument all code by creating an error.log
-- When a checkpoint prompt is given, update the regression test, run it, prompt whether to commit and push
-- Clearly indicate when a change has been deployed
+A browser-based landing page for East Tennessee Corvette Club members to select and launch ETCC web applications. Deployed at `https://etccapps.com` (root index.html). Runs entirely in the browser with no backend.
+
+---
+
+## File Structure
+
+```
+index.html      — Entire application (single-page SPA, all JS inline)
+test.html       — Regression test suite (15 tests via fetch + DOMParser)
+ETCClogo.png    — ETCC logo used in header and hero
+Claude.md       — This file
+README.md       — Minimal placeholder
+.claude/
+  launch.json   — Preview server config (autoPort: true)
+```
+
+---
+
+## Architecture
+
+- **Single HTML file** — all styles, markup, and JS inline in `index.html`
+- **No backend, no database** — purely static, no localStorage needed
+- Deployed to Hostinger as the root `index.html` at `etccapps.com`
+
+---
+
+## Navigation / Pages
+
+Two pages shown/hidden with `.page` / `.page.active`:
+
+| Page ID         | Route         | Access         |
+|-----------------|---------------|----------------|
+| `page-home`     | Default       | Public          |
+| `page-settings` | Settings nav  | Password-gated  |
+
+Navigation via left sidebar (240px, `var(--sidebar-w)`), triggered by hamburger button in header. Sidebar slides in over content with a dark overlay; clicking overlay closes it.
+
+---
+
+## App Cards
+
+| Card | Status | Link |
+|------|--------|------|
+| Silent Auction Manager | Live (`badge-live`) | `https://etccapps.com/apps/sam` |
+| Other Apps Coming Soon | Coming Soon (`badge-soon`) | None (`.coming-soon` class disables hover/link) |
+
+Cards use `.app-card` class. Live cards are `<a>` elements; coming-soon cards are `<div>`.
+
+---
+
+## Settings Page
+
+- Accessed via the Settings nav item in the sidebar
+- Password-protected: clicking Settings opens `#pwModal` password modal
+- Password constant: `SETTINGS_PW` in index.html (do not log or expose)
+- On success: `showPage('settings')` is called
+- Settings page contains one card: **Regression Test** — runs `runRegressionTest()` against live DOM
+
+---
+
+## Regression Tests
+
+- **In-browser (Settings page):** `runRegressionTest()` in `index.html` — 15 tests against `document` (live DOM). Results shown in `#test-results` table.
+- **Standalone file:** `test.html` — fetches `index.html` via `fetch()`, parses with `DOMParser`, runs same 15 tests. Works both locally (via dev server) and deployed. Does NOT use an iframe (cross-origin issues on `file://`).
+- Run locally: open `http://localhost:<port>/test.html` via preview server
+- Run deployed: open `https://etccapps.com/test.html`
+- **Always run regression tests before reporting a task complete**
+
+---
+
+## GitHub
+
+- Repo: `ETCCRepo/ETCCDashboard` (GitHub org account)
+- Remote URL embeds PAT to authorize pushes (ETCCRepo is not the default git user):
+  ```
+  https://ETCCRepo:<PAT>@github.com/ETCCRepo/ETCCDashboard.git
+  ```
+- Local git `user.name` set to `ETCCRepo` for this repo
+- Default global git user is `C177LVR` — do not use for ETCCRepo pushes
+
+---
+
+## Deployment
+
+- Host: Hostinger
+- URL: `https://etccapps.com` (root — `index.html` served at `/`)
+- Deploy via FTP using `deploy.ps1` in the project root (if present), or manual FTP upload
+- Always clearly indicate when files have been deployed
+
+---
 
 ## Palette
 
-**Base Variables**
-| Role | Color | Hex |
+**CSS Variables (defined in `:root`)**
+| Variable | Hex | Role |
 |---|---|---|
-| Background | White | `#ffffff` |
-| Dark background | Black | `#000000` |
-| Section background | Light gray | `#f5f5f7` |
-| Primary text | Near-black | `#1d1d1f` |
-| Secondary text | Medium gray | `#6e6e73` |
-| Tertiary text | Light gray | `#86868b` |
-| Accent / Link | Blue | `#0071e3` |
-| Accent hover | Dark blue | `#0077ed` |
-| Border / Divider | Light gray | `#d2d2d7` |
-| Nav bar | Near-black | `#1d1d1f` |
-| Danger | Red | `#c62828` |
-| Success | Green | `#1a7f37` |
+| `--bg` | `#ffffff` | Page background |
+| `--bg-section` | `#f5f5f7` | Section / body background |
+| `--text` | `#1d1d1f` | Primary text |
+| `--text-sec` | `#6e6e73` | Secondary text |
+| `--text-ter` | `#86868b` | Tertiary text |
+| `--accent` | `#0071e3` | Links, active nav, focus |
+| `--accent-hover` | `#0077ed` | Accent hover state |
+| `--border` | `#d2d2d7` | Borders, dividers |
+| `--nav-bar` | `#1d1d1f` | Header and sidebar background |
+| `--danger` | `#c62828` | Error states |
+| `--success` | `#1a7f37` | Success states |
+| `--etcc-red` | `#c0392b` | ETCC brand red |
+| `--etcc-gold` | `#f0a500` | ETCC brand gold (accents, hover) |
+| `--etcc-blue` | `#1a56a0` | ETCC brand blue |
+| `--sidebar-w` | `240px` | Sidebar width |
 
-**ETCC Brand Accents**
-| Role | Color | Hex |
-|---|---|---|
-| ETCC Red | Red | `#c0392b` |
-| ETCC Gold | Gold | `#f0a500` |
-| ETCC Blue | Blue | `#1a56a0` |
+> This is the ETCC blue/white/dark palette. Do NOT use the gold/brown HandmadeDesignsBySuzi palette here.
 
-**Table Headers (override)**
-| Role | Color | Hex |
-|---|---|---|
-| Header background | Light blue | `#dbeafe` |
-| Header text | Near-black (via `var(--text)`) | `#1d1d1f` |
-| Header position | Sticky | — |
+**Table headers:** `background: #dbeafe`, sticky
 
-**Toolbar Overrides**
-| Role | Color | Hex |
-|---|---|---|
-| Toolbar background | Nav bar (via `var(--nav-bar)`) | `#1d1d1f` |
-| Toolbar border | Light gray (via `var(--border)`) | `#d2d2d7` |
-| Logo text | Blue (via `var(--accent)`) | `#0071e3` |
-| Title text | White | `#ffffff` |
-| Button background | Light gray (via `var(--bg-section)`) | `#f5f5f7` |
-| Button border | Light gray (via `var(--border)`) | `#d2d2d7` |
-| Button text | Near-black (via `var(--text)`) | `#1d1d1f` |
-| Button hover background | Blue (via `var(--accent)`) | `#0071e3` |
-| Button hover border | Dark blue (via `var(--accent-hover)`) | `#0077ed` |
-| Button hover text | White | `#ffffff` |
-| Close button | Red (via `var(--danger)`) | `#c62828` |
+---
+
+## Standard Rules (from StandardPrompts.md)
+
+- Always read the instructions in `Z:\Backup\Websites\Web Utilities\components\table\readme.md`
+- Always read the instructions in `Z:\Backup\Websites\Web Utilities\components\toolbar\readme.md`
+- Protect existing working features — do not delete or rewrite large sections unless necessary
+- Before coding, identify affected files and possible side effects
+- Use the existing project structure and coding style (inline JS in index.html, no frameworks)
+- After changes, provide a regression test checklist
+- Only commit, push, or deploy when explicitly given a checkpoint command
+- When a checkpoint is given: update regression tests, run them, prompt whether to commit and push
+- Clearly indicate when a change has been deployed
+- Instrument all code by creating an error.log
+- Whenever a checkpoint prompt is given with no description, use a good short name
