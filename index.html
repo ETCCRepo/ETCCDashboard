@@ -19,11 +19,10 @@
       --nav-bar:     #1d1d1f;
       --danger:      #c62828;
       --success:     #1a7f37;
-
-      /* ETCC brand accents */
       --etcc-red:    #c0392b;
       --etcc-gold:   #f0a500;
       --etcc-blue:   #1a56a0;
+      --sidebar-w:   240px;
     }
 
     body {
@@ -38,7 +37,7 @@
     /* ── Header ── */
     header {
       background: var(--nav-bar);
-      padding: 0 2rem;
+      padding: 0 1.5rem;
       display: flex;
       align-items: center;
       gap: 1rem;
@@ -46,33 +45,95 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.4);
       position: sticky;
       top: 0;
-      z-index: 100;
+      z-index: 200;
     }
 
-    header img {
-      height: 52px;
-      width: auto;
-    }
-
-    .header-text {
+    .hamburger {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
       display: flex;
       flex-direction: column;
+      gap: 5px;
+      flex-shrink: 0;
+    }
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: #fff;
+      border-radius: 2px;
+      transition: all 0.2s ease;
+    }
+    .hamburger:hover span { background: var(--etcc-gold); }
+
+    header img { height: 52px; width: auto; }
+
+    .header-text { display: flex; flex-direction: column; }
+    .header-title { color: #fff; font-size: 1.15rem; font-weight: 700; letter-spacing: 0.01em; line-height: 1.2; }
+    .header-sub   { color: var(--etcc-gold); font-size: 0.75rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; }
+
+    /* ── Layout ── */
+    .layout {
+      display: flex;
+      flex: 1;
+      position: relative;
     }
 
-    .header-title {
-      color: #ffffff;
-      font-size: 1.15rem;
-      font-weight: 700;
-      letter-spacing: 0.01em;
-      line-height: 1.2;
+    /* ── Sidebar ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--nav-bar);
+      display: flex;
+      flex-direction: column;
+      padding: 1.25rem 0;
+      position: fixed;
+      top: 72px;
+      left: calc(-1 * var(--sidebar-w));
+      bottom: 0;
+      z-index: 150;
+      transition: left 0.25s ease;
+      box-shadow: 2px 0 12px rgba(0,0,0,0.3);
     }
+    .sidebar.open { left: 0; }
 
-    .header-sub {
-      color: var(--etcc-gold);
-      font-size: 0.75rem;
-      font-weight: 500;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 72px 0 0 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 140;
+    }
+    .sidebar-overlay.open { display: block; }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1.5rem;
+      color: rgba(255,255,255,0.75);
+      font-size: 0.95rem;
+      cursor: pointer;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s;
+      border-left: 3px solid transparent;
+    }
+    .nav-item:hover { background: rgba(255,255,255,0.08); color: #fff; }
+    .nav-item.active { background: rgba(0,113,227,0.18); color: #fff; border-left-color: var(--accent); }
+    .nav-item svg { flex-shrink: 0; opacity: 0.8; }
+    .nav-item:hover svg, .nav-item.active svg { opacity: 1; }
+
+    .nav-divider { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 0.5rem 1.5rem; }
+
+    /* ── Main content ── */
+    .main-content {
+      flex: 1;
+      transition: margin-left 0.25s ease;
     }
 
     /* ── Hero ── */
@@ -84,20 +145,12 @@
       position: relative;
       overflow: hidden;
     }
-
     .hero::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: repeating-linear-gradient(
-        -45deg,
-        transparent,
-        transparent 18px,
-        rgba(255,255,255,0.025) 18px,
-        rgba(255,255,255,0.025) 19px
-      );
+      background: repeating-linear-gradient(-45deg, transparent, transparent 18px, rgba(255,255,255,0.025) 18px, rgba(255,255,255,0.025) 19px);
     }
-
     .hero-logo {
       width: 110px;
       height: auto;
@@ -107,53 +160,28 @@
       margin-bottom: 1.25rem;
       position: relative;
     }
+    .hero h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 700; letter-spacing: -0.01em; margin-bottom: 0.5rem; position: relative; }
+    .hero h1 span { color: var(--etcc-gold); }
+    .hero p { color: rgba(255,255,255,0.72); font-size: 1rem; max-width: 480px; margin: 0 auto; position: relative; }
 
-    .hero h1 {
-      font-size: clamp(1.6rem, 4vw, 2.4rem);
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      margin-bottom: 0.5rem;
-      position: relative;
-    }
-
-    .hero h1 span {
-      color: var(--etcc-gold);
-    }
-
-    .hero p {
-      color: rgba(255,255,255,0.72);
-      font-size: 1rem;
-      max-width: 480px;
-      margin: 0 auto;
-      position: relative;
-    }
+    /* ── Pages ── */
+    .page { display: none; }
+    .page.active { display: block; }
 
     /* ── App Grid ── */
-    main {
-      flex: 1;
+    .app-section {
       max-width: 1100px;
       width: 100%;
       margin: 0 auto;
       padding: 3rem 1.5rem 4rem;
     }
 
-    .section-label {
-      font-size: 0.7rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--text-ter);
-      margin-bottom: 1.25rem;
-    }
-
     .app-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
       gap: 1.25rem;
-      margin-bottom: 3rem;
     }
 
-    /* ── App Card ── */
     .app-card {
       background: var(--bg);
       border: 1px solid var(--border);
@@ -167,35 +195,11 @@
       transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
       cursor: pointer;
     }
+    .app-card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,0.1); border-color: var(--accent); }
+    .app-card.coming-soon { opacity: 0.65; cursor: default; }
+    .app-card.coming-soon:hover { transform: none; box-shadow: none; border-color: var(--border); }
 
-    .app-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 28px rgba(0,0,0,0.1);
-      border-color: var(--accent);
-    }
-
-    .app-card.coming-soon {
-      opacity: 0.65;
-      cursor: default;
-    }
-
-    .app-card.coming-soon:hover {
-      transform: none;
-      box-shadow: none;
-      border-color: var(--border);
-    }
-
-    .card-icon {
-      width: 52px;
-      height: 52px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.6rem;
-      flex-shrink: 0;
-    }
-
+    .card-icon { width: 52px; height: 52px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; flex-shrink: 0; }
     .card-icon.red    { background: #fde8e8; }
     .card-icon.blue   { background: #dbeafe; }
     .card-icon.green  { background: #dcfce7; }
@@ -203,39 +207,100 @@
     .card-icon.purple { background: #ede9fe; }
     .card-icon.teal   { background: #ccfbf1; }
 
-    .card-name {
-      font-size: 1.05rem;
-      font-weight: 700;
-      line-height: 1.2;
-    }
+    .card-name { font-size: 1.05rem; font-weight: 700; line-height: 1.2; }
+    .card-desc { font-size: 0.875rem; color: var(--text-sec); line-height: 1.5; flex: 1; }
 
-    .card-desc {
+    .card-badge { display: inline-block; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.2rem 0.55rem; border-radius: 999px; align-self: flex-start; }
+    .badge-live { background: #dcfce7; color: var(--success); }
+    .badge-soon { background: #f5f5f7; color: var(--text-ter); }
+
+    /* ── Settings Page ── */
+    .settings-section {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 4rem;
+    }
+    .settings-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .settings-sub   { color: var(--text-sec); font-size: 0.9rem; margin-bottom: 2rem; }
+
+    .settings-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+    .settings-card h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .settings-card p  { font-size: 0.875rem; color: var(--text-sec); margin-bottom: 1rem; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--bg-section);
+      border: 1px solid var(--border);
+      color: var(--text);
       font-size: 0.875rem;
-      color: var(--text-sec);
-      line-height: 1.5;
-      flex: 1;
+      font-weight: 600;
+      padding: 0.5rem 1.1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
     }
+    .btn:hover { background: var(--accent); border-color: var(--accent-hover); color: #fff; }
+    .btn.danger:hover { background: var(--danger); border-color: var(--danger); color: #fff; }
 
-    .card-badge {
-      display: inline-block;
-      font-size: 0.68rem;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      padding: 0.2rem 0.55rem;
-      border-radius: 999px;
-      align-self: flex-start;
-    }
+    /* ── Regression Results ── */
+    #test-results { margin-top: 1.25rem; display: none; }
+    #test-results table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+    #test-results th { background: #dbeafe; padding: 0.5rem 0.75rem; text-align: left; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    #test-results td { padding: 0.5rem 0.75rem; border-top: 1px solid var(--border); }
+    #test-results .pass { color: var(--success); font-weight: 700; }
+    #test-results .fail { color: var(--danger); font-weight: 700; }
+    #test-summary { margin-top: 0.75rem; font-weight: 700; font-size: 0.95rem; }
 
-    .badge-live {
-      background: #dcfce7;
-      color: var(--success);
+    /* ── Password Modal ── */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 300;
+      align-items: center;
+      justify-content: center;
     }
+    .modal-backdrop.open { display: flex; }
 
-    .badge-soon {
-      background: #f5f5f7;
-      color: var(--text-ter);
+    .modal {
+      background: var(--bg);
+      border-radius: 16px;
+      padding: 2rem;
+      width: 340px;
+      max-width: 90vw;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.3);
     }
+    .modal h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .modal p  { font-size: 0.875rem; color: var(--text-sec); margin-bottom: 1.25rem; }
+
+    .modal input[type="password"] {
+      width: 100%;
+      padding: 0.6rem 0.85rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .modal input[type="password"]:focus { border-color: var(--accent); }
+
+    .modal-error { color: var(--danger); font-size: 0.8rem; min-height: 1.1rem; margin-bottom: 0.75rem; }
+
+    .modal-actions { display: flex; gap: 0.75rem; justify-content: flex-end; }
+    .btn-primary { background: var(--accent); border: 1px solid var(--accent-hover); color: #fff; font-size: 0.875rem; font-weight: 600; padding: 0.5rem 1.1rem; border-radius: 8px; cursor: pointer; }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-cancel  { background: var(--bg-section); border: 1px solid var(--border); color: var(--text); font-size: 0.875rem; font-weight: 600; padding: 0.5rem 1.1rem; border-radius: 8px; cursor: pointer; }
+    .btn-cancel:hover { background: var(--border); }
 
     /* ── Footer ── */
     footer {
@@ -246,16 +311,12 @@
       padding: 1.25rem 1rem;
       letter-spacing: 0.02em;
     }
-
-    footer a {
-      color: var(--etcc-gold);
-      text-decoration: none;
-    }
+    footer a { color: var(--etcc-gold); text-decoration: none; }
 
     @media (max-width: 520px) {
       header { padding: 0 1rem; }
-      .hero { padding: 2.5rem 1rem 2rem; }
-      main { padding: 2rem 1rem 3rem; }
+      .hero  { padding: 2.5rem 1rem 2rem; }
+      .app-section, .settings-section { padding: 2rem 1rem 3rem; }
     }
   </style>
 </head>
@@ -263,6 +324,9 @@
 
   <!-- Header -->
   <header>
+    <button class="hamburger" id="menuBtn" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
     <img src="ETCClogo.png" alt="ETCC Logo" />
     <div class="header-text">
       <span class="header-title">East Tennessee Corvette Club</span>
@@ -270,41 +334,214 @@
     </div>
   </header>
 
-  <!-- Hero -->
-  <div class="hero">
-    <img class="hero-logo" src="ETCClogo.png" alt="ETCC Logo" />
-    <h1>Welcome to <span>ETCC Apps</span></h1>
-    <p>Your central hub for East Tennessee Corvette Club member tools and resources.</p>
-  </div>
+  <!-- Sidebar overlay -->
+  <div class="sidebar-overlay" id="overlay"></div>
 
-  <!-- App Grid -->
-  <main>
-    <div class="app-grid">
+  <div class="layout">
 
-      <a class="app-card" href="https://etccapps.com/apps/sam">
-        <div class="card-icon red">🏆</div>
-        <div class="card-name">Silent Auction Manager</div>
-        <div class="card-desc">Manage auction items, bidding, winner announcements, and post-auction pickup.</div>
-        <span class="card-badge badge-live">Live</span>
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+      <a class="nav-item active" id="nav-home" href="#" onclick="showPage('home'); return false;">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+        Dashboard
       </a>
+      <hr class="nav-divider" />
+      <button class="nav-item" id="nav-settings" onclick="promptPassword()">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        Settings
+      </button>
+    </nav>
 
-      <div class="app-card coming-soon">
-        <div class="card-icon blue">👥</div>
-        <div class="card-name">Other Apps Coming Soon ...</div>
-        <div class="card-desc">Additional member tools and resources are under development.</div>
-        <span class="card-badge badge-soon">Coming Soon</span>
+    <!-- Main content -->
+    <div class="main-content">
+
+      <!-- Dashboard Page -->
+      <div class="page active" id="page-home">
+        <div class="hero">
+          <img class="hero-logo" src="ETCClogo.png" alt="ETCC Logo" />
+          <h1>Welcome to <span>ETCC Apps</span></h1>
+          <p>Your central hub for East Tennessee Corvette Club member tools and resources.</p>
+        </div>
+        <div class="app-section">
+          <div class="app-grid">
+            <a class="app-card" href="https://etccapps.com/apps/sam">
+              <div class="card-icon red">🏆</div>
+              <div class="card-name">Silent Auction Manager</div>
+              <div class="card-desc">Manage auction items, bidding, winner announcements, and post-auction pickup.</div>
+              <span class="card-badge badge-live">Live</span>
+            </a>
+            <div class="app-card coming-soon">
+              <div class="card-icon blue">👥</div>
+              <div class="card-name">Other Apps Coming Soon ...</div>
+              <div class="card-desc">Additional member tools and resources are under development.</div>
+              <span class="card-badge badge-soon">Coming Soon</span>
+            </div>
+          </div>
+        </div>
       </div>
 
-    </div>
-  </main>
+      <!-- Settings Page -->
+      <div class="page" id="page-settings">
+        <div class="settings-section">
+          <div class="settings-title">Settings</div>
+          <div class="settings-sub">Administrative tools and configuration.</div>
+
+          <div class="settings-card">
+            <h2>Regression Test</h2>
+            <p>Verify that all key dashboard elements are present and functioning correctly.</p>
+            <button class="btn" onclick="runRegressionTest()">
+              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+              Run Regression Test
+            </button>
+
+            <div id="test-results">
+              <table>
+                <thead><tr><th>#</th><th>Test</th><th>Result</th></tr></thead>
+                <tbody id="test-tbody"></tbody>
+              </table>
+              <div id="test-summary"></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div><!-- /main-content -->
+  </div><!-- /layout -->
 
   <!-- Footer -->
   <footer>
     &copy; 2026 East Tennessee Corvette Club &mdash; <a href="https://etccapps.com">etccapps.com</a>
   </footer>
 
+  <!-- Password Modal -->
+  <div class="modal-backdrop" id="pwModal">
+    <div class="modal">
+      <h2>
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="vertical-align:-2px;margin-right:6px"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        Settings Access
+      </h2>
+      <p>Enter the password to access Settings.</p>
+      <input type="password" id="pwInput" placeholder="Password" onkeydown="if(event.key==='Enter') checkPassword()" />
+      <div class="modal-error" id="pwError"></div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+        <button class="btn-primary" onclick="checkPassword()">Unlock</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const SETTINGS_PW = 'sdjk54580ssd;$^%$()*';
+
+    // ── Sidebar toggle ──
+    const sidebar  = document.getElementById('sidebar');
+    const overlay  = document.getElementById('overlay');
+    const menuBtn  = document.getElementById('menuBtn');
+
+    menuBtn.addEventListener('click', () => {
+      const open = sidebar.classList.toggle('open');
+      overlay.classList.toggle('open', open);
+    });
+    overlay.addEventListener('click', closeSidebar);
+    function closeSidebar() {
+      sidebar.classList.remove('open');
+      overlay.classList.remove('open');
+    }
+
+    // ── Page navigation ──
+    function showPage(name) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.getElementById('page-' + name).classList.add('active');
+      document.getElementById('nav-' + name).classList.add('active');
+      closeSidebar();
+    }
+
+    // ── Password modal ──
+    function promptPassword() {
+      document.getElementById('pwInput').value = '';
+      document.getElementById('pwError').textContent = '';
+      document.getElementById('pwModal').classList.add('open');
+      setTimeout(() => document.getElementById('pwInput').focus(), 50);
+    }
+
+    function closeModal() {
+      document.getElementById('pwModal').classList.remove('open');
+    }
+
+    function checkPassword() {
+      const val = document.getElementById('pwInput').value;
+      if (val === SETTINGS_PW) {
+        closeModal();
+        showPage('settings');
+        document.getElementById('nav-settings').classList.add('active');
+        document.getElementById('nav-home').classList.remove('active');
+      } else {
+        document.getElementById('pwError').textContent = 'Incorrect password. Please try again.';
+        document.getElementById('pwInput').value = '';
+        document.getElementById('pwInput').focus();
+      }
+    }
+
+    // ── Regression tests ──
+    function runRegressionTest() {
+      const doc = document;
+
+      const tests = [
+        { name: 'Page title contains ETCC',
+          fn: () => doc.title.includes('ETCC') && doc.title.includes('East Tennessee') },
+        { name: 'Header logo present',
+          fn: () => !!doc.querySelector('header img[src*="ETCClogo"]') },
+        { name: 'Header title correct',
+          fn: () => { const el = doc.querySelector('.header-title'); return !!el && el.textContent.includes('East Tennessee Corvette Club'); } },
+        { name: 'Hero heading contains ETCC Apps',
+          fn: () => { const el = doc.querySelector('.hero h1'); return !!el && el.textContent.includes('ETCC Apps'); } },
+        { name: 'Hero logo present',
+          fn: () => !!doc.querySelector('.hero-logo') },
+        { name: 'Silent Auction Manager card present',
+          fn: () => { const cards = Array.from(doc.querySelectorAll('.card-name')); return !!cards.find(c => c.textContent.includes('Silent Auction Manager')); } },
+        { name: 'SAM links to etccapps.com/apps/sam',
+          fn: () => { const a = doc.querySelector('a.app-card'); return !!a && a.href.includes('etccapps.com/apps/sam'); } },
+        { name: 'Live badge present',
+          fn: () => !!doc.querySelector('.badge-live') },
+        { name: 'Coming Soon card present',
+          fn: () => !!doc.querySelector('.app-card.coming-soon') },
+        { name: 'Coming Soon badge present',
+          fn: () => { const b = doc.querySelector('.badge-soon'); return !!b && b.textContent.includes('Coming Soon'); } },
+        { name: 'Other Apps Coming Soon text present',
+          fn: () => { const cards = Array.from(doc.querySelectorAll('.card-name')); return !!cards.find(c => c.textContent.includes('Other Apps Coming Soon')); } },
+        { name: 'Footer contains etccapps.com',
+          fn: () => { const f = doc.querySelector('footer'); return !!f && f.textContent.includes('etccapps.com'); } },
+        { name: 'Footer copyright 2026',
+          fn: () => { const f = doc.querySelector('footer'); return !!f && f.textContent.includes('2026'); } },
+        { name: 'Settings nav item present',
+          fn: () => !!doc.getElementById('nav-settings') },
+        { name: 'Password modal present',
+          fn: () => !!doc.getElementById('pwModal') }
+      ];
+
+      const tbody = document.getElementById('test-tbody');
+      tbody.innerHTML = '';
+      let passed = 0;
+
+      tests.forEach((t, i) => {
+        let ok = false;
+        try { ok = t.fn(); } catch(e) { ok = false; }
+        if (ok) passed++;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${i+1}</td><td>${t.name}</td><td class="${ok ? 'pass' : 'fail'}">${ok ? 'PASS' : 'FAIL'}</td>`;
+        tbody.appendChild(tr);
+      });
+
+      const summary = document.getElementById('test-summary');
+      summary.textContent = `${passed} / ${tests.length} tests passed`;
+      summary.style.color = passed === tests.length ? 'var(--success)' : 'var(--danger)';
+
+      document.getElementById('test-results').style.display = 'block';
+    }
+  </script>
+
 </body>
 </html>
-
-
 
