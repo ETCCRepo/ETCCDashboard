@@ -1,0 +1,310 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ETCC Apps — East Tennessee Corvette Club</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #ffffff;
+      --bg-section:  #f5f5f7;
+      --text:        #1d1d1f;
+      --text-sec:    #6e6e73;
+      --text-ter:    #86868b;
+      --accent:      #0071e3;
+      --accent-hover:#0077ed;
+      --border:      #d2d2d7;
+      --nav-bar:     #1d1d1f;
+      --danger:      #c62828;
+      --success:     #1a7f37;
+
+      /* ETCC brand accents */
+      --etcc-red:    #c0392b;
+      --etcc-gold:   #f0a500;
+      --etcc-blue:   #1a56a0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg-section);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--nav-bar);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      height: 72px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    header img {
+      height: 52px;
+      width: auto;
+    }
+
+    .header-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header-title {
+      color: #ffffff;
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      line-height: 1.2;
+    }
+
+    .header-sub {
+      color: var(--etcc-gold);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(135deg, var(--nav-bar) 0%, #2c2c2e 60%, #1a3a6e 100%);
+      color: #fff;
+      text-align: center;
+      padding: 3.5rem 2rem 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 18px,
+        rgba(255,255,255,0.025) 18px,
+        rgba(255,255,255,0.025) 19px
+      );
+    }
+
+    .hero-logo {
+      width: 110px;
+      height: auto;
+      border-radius: 50%;
+      border: 3px solid var(--etcc-gold);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+      margin-bottom: 1.25rem;
+      position: relative;
+    }
+
+    .hero h1 {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.5rem;
+      position: relative;
+    }
+
+    .hero h1 span {
+      color: var(--etcc-gold);
+    }
+
+    .hero p {
+      color: rgba(255,255,255,0.72);
+      font-size: 1rem;
+      max-width: 480px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    /* ── App Grid ── */
+    main {
+      flex: 1;
+      max-width: 1100px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 4rem;
+    }
+
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-ter);
+      margin-bottom: 1.25rem;
+    }
+
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 3rem;
+    }
+
+    /* ── App Card ── */
+    .app-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.75rem 1.5rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+      cursor: pointer;
+    }
+
+    .app-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.1);
+      border-color: var(--accent);
+    }
+
+    .app-card.coming-soon {
+      opacity: 0.65;
+      cursor: default;
+    }
+
+    .app-card.coming-soon:hover {
+      transform: none;
+      box-shadow: none;
+      border-color: var(--border);
+    }
+
+    .card-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      flex-shrink: 0;
+    }
+
+    .card-icon.red    { background: #fde8e8; }
+    .card-icon.blue   { background: #dbeafe; }
+    .card-icon.green  { background: #dcfce7; }
+    .card-icon.gold   { background: #fef3c7; }
+    .card-icon.purple { background: #ede9fe; }
+    .card-icon.teal   { background: #ccfbf1; }
+
+    .card-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .card-desc {
+      font-size: 0.875rem;
+      color: var(--text-sec);
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    .card-badge {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      align-self: flex-start;
+    }
+
+    .badge-live {
+      background: #dcfce7;
+      color: var(--success);
+    }
+
+    .badge-soon {
+      background: #f5f5f7;
+      color: var(--text-ter);
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--nav-bar);
+      color: rgba(255,255,255,0.45);
+      text-align: center;
+      font-size: 0.78rem;
+      padding: 1.25rem 1rem;
+      letter-spacing: 0.02em;
+    }
+
+    footer a {
+      color: var(--etcc-gold);
+      text-decoration: none;
+    }
+
+    @media (max-width: 520px) {
+      header { padding: 0 1rem; }
+      .hero { padding: 2.5rem 1rem 2rem; }
+      main { padding: 2rem 1rem 3rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <img src="ETCClogo.png" alt="ETCC Logo" />
+    <div class="header-text">
+      <span class="header-title">East Tennessee Corvette Club</span>
+      <span class="header-sub">Member Apps</span>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <div class="hero">
+    <img class="hero-logo" src="ETCClogo.png" alt="ETCC Logo" />
+    <h1>Welcome to <span>ETCC Apps</span></h1>
+    <p>Your central hub for East Tennessee Corvette Club member tools and resources.</p>
+  </div>
+
+  <!-- App Grid -->
+  <main>
+    <div class="app-grid">
+
+      <a class="app-card" href="https://etccapps.com/apps/sam">
+        <div class="card-icon red">🏆</div>
+        <div class="card-name">Silent Auction Manager</div>
+        <div class="card-desc">Manage auction items, bidding, winner announcements, and post-auction pickup.</div>
+        <span class="card-badge badge-live">Live</span>
+      </a>
+
+      <div class="app-card coming-soon">
+        <div class="card-icon blue">👥</div>
+        <div class="card-name">Other Apps Coming Soon ...</div>
+        <div class="card-desc">Additional member tools and resources are under development.</div>
+        <span class="card-badge badge-soon">Coming Soon</span>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2026 East Tennessee Corvette Club &mdash; <a href="https://etccapps.com">etccapps.com</a>
+  </footer>
+
+</body>
+</html>
+
+
+
