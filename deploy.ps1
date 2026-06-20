@@ -73,7 +73,7 @@ $dashboardFiles = @(
 
 # Files deployed to root account (public_html/)
 $rootFiles = @(
-    @{ local="htaccess-root/.htaccess"; remote=".htaccess" },
+    @{ local="htaccess-root/.htaccess"; remote="domains/etccapps.com/public_html/.htaccess" },
     @{ local="robots.txt";              remote="domains/etccapps.com/public_html/robots.txt" },
     @{ local="sitemap.xml";             remote="domains/etccapps.com/public_html/sitemap.xml" }
 )

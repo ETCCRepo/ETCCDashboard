@@ -1,13 +1,13 @@
-﻿RewriteEngine On
+RewriteEngine On
 
 # Force HTTPS
 RewriteCond %{HTTPS} off
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
-# Redirect all traffic on root domain to dashboard subdomain
+# Redirect root domain (bare / and empty path) to dashboard app
 RewriteCond %{HTTP_HOST} ^(www\.)?etccapps\.com$ [NC]
 RewriteCond %{HTTPS} on
-RewriteRule ^(.*)$ https://dashboard.etccapps.com/$1 [R=301,L]
+RewriteRule ^/?$ https://etccapps.com/apps/dashboard/ [R=301,L]
 
 # Custom 404
 ErrorDocument 404 /apps/dashboard/404.html
