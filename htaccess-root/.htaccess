@@ -1,0 +1,3 @@
+RewriteEngine On
+RewriteCond %{HTTP_HOST} ^(www\.)?etccapps\.com$ [NC]
+RewriteRule ^$ https://dashboard.etccapps.com/ [R=301,L]
