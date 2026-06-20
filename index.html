@@ -1,9 +1,23 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ETCC Apps — East Tennessee Corvette Club</title>
+  <title>ETCC Dashboard &mdash; East Tennessee Corvette Club</title>
+  <meta name="description" content="East Tennessee Corvette Club member app portal - access SAM and other ETCC tools." />
+  <meta property="og:title" content="ETCC Dashboard" />
+  <meta property="og:description" content="East Tennessee Corvette Club member app portal." />
+  <meta property="og:image" content="https://etccapps.com/apps/dashboard/ETCClogo.png" />
+  <meta property="og:image:width" content="200" />
+  <meta property="og:image:height" content="200" />
+  <meta property="og:url" content="https://dashboard.etccapps.com/" />
+  <meta property="og:type" content="website" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="apple-touch-icon" href="ETCClogo.png" />
+  <meta name="theme-color" content="#1d1d1f" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://dashboard.etccapps.com/" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -19,9 +33,7 @@
       --nav-bar:     #1d1d1f;
       --danger:      #c62828;
       --success:     #1a7f37;
-      --etcc-red:    #c0392b;
       --etcc-gold:   #f0a500;
-      --etcc-blue:   #1a56a0;
       --sidebar-w:   240px;
     }
 
@@ -34,7 +46,7 @@
       flex-direction: column;
     }
 
-    /* ── Header ── */
+    /* -- Header -- */
     header {
       background: var(--nav-bar);
       padding: 0 1.5rem;
@@ -74,14 +86,14 @@
     .header-title { color: #fff; font-size: 1.15rem; font-weight: 700; letter-spacing: 0.01em; line-height: 1.2; }
     .header-sub   { color: var(--etcc-gold); font-size: 0.75rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; }
 
-    /* ── Layout ── */
+    /* -- Layout -- */
     .layout {
       display: flex;
       flex: 1;
       position: relative;
     }
 
-    /* ── Sidebar ── */
+    /* -- Sidebar -- */
     .sidebar {
       width: var(--sidebar-w);
       background: var(--nav-bar);
@@ -130,13 +142,13 @@
 
     .nav-divider { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 0.5rem 1.5rem; }
 
-    /* ── Main content ── */
+    /* -- Main content -- */
     .main-content {
       flex: 1;
       transition: margin-left 0.25s ease;
     }
 
-    /* ── Hero ── */
+    /* -- Hero -- */
     .hero {
       background: linear-gradient(135deg, var(--nav-bar) 0%, #2c2c2e 60%, #1a3a6e 100%);
       color: #fff;
@@ -164,11 +176,11 @@
     .hero h1 span { color: var(--etcc-gold); }
     .hero p { color: rgba(255,255,255,0.72); font-size: 1rem; max-width: 480px; margin: 0 auto; position: relative; }
 
-    /* ── Pages ── */
+    /* -- Pages -- */
     .page { display: none; }
     .page.active { display: block; }
 
-    /* ── App Grid ── */
+    /* -- App Grid -- */
     .app-section {
       max-width: 1100px;
       width: 100%;
@@ -200,12 +212,8 @@
     .app-card.coming-soon:hover { transform: none; box-shadow: none; border-color: var(--border); }
 
     .card-icon { width: 52px; height: 52px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; flex-shrink: 0; }
-    .card-icon.red    { background: #fde8e8; }
-    .card-icon.blue   { background: #dbeafe; }
-    .card-icon.green  { background: #dcfce7; }
-    .card-icon.gold   { background: #fef3c7; }
-    .card-icon.purple { background: #ede9fe; }
-    .card-icon.teal   { background: #ccfbf1; }
+    .card-icon.red  { background: #fde8e8; }
+    .card-icon.blue { background: #dbeafe; }
 
     .card-name { font-size: 1.05rem; font-weight: 700; line-height: 1.2; }
     .card-desc { font-size: 0.875rem; color: var(--text-sec); line-height: 1.5; flex: 1; }
@@ -214,7 +222,7 @@
     .badge-live { background: #dcfce7; color: var(--success); }
     .badge-soon { background: #f5f5f7; color: var(--text-ter); }
 
-    /* ── Settings Page ── */
+    /* -- Settings Page -- */
     .settings-section {
       max-width: 700px;
       margin: 0 auto;
@@ -248,9 +256,10 @@
       transition: background 0.15s, border-color 0.15s, color 0.15s;
     }
     .btn:hover { background: var(--accent); border-color: var(--accent-hover); color: #fff; }
-    .btn.danger:hover { background: var(--danger); border-color: var(--danger); color: #fff; }
 
-    /* ── Regression Results ── */
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+    /* -- Regression Results -- */
     #test-results { margin-top: 1.25rem; display: none; }
     #test-results table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
     #test-results th { background: #dbeafe; padding: 0.5rem 0.75rem; text-align: left; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; }
@@ -259,7 +268,7 @@
     #test-results .fail { color: var(--danger); font-weight: 700; }
     #test-summary { margin-top: 0.75rem; font-weight: 700; font-size: 0.95rem; }
 
-    /* ── Password Modal ── */
+    /* -- Password Modal -- */
     .modal-backdrop {
       display: none;
       position: fixed;
@@ -302,7 +311,7 @@
     .btn-cancel  { background: var(--bg-section); border: 1px solid var(--border); color: var(--text); font-size: 0.875rem; font-weight: 600; padding: 0.5rem 1.1rem; border-radius: 8px; cursor: pointer; }
     .btn-cancel:hover { background: var(--border); }
 
-    /* ── Footer ── */
+    /* -- Footer -- */
     footer {
       background: var(--nav-bar);
       color: rgba(255,255,255,0.45);
@@ -310,8 +319,16 @@
       font-size: 0.78rem;
       padding: 1.25rem 1rem;
       letter-spacing: 0.02em;
+      line-height: 1.8;
     }
     footer a { color: var(--etcc-gold); text-decoration: none; }
+
+    .skip-nav {
+      position: absolute; left: -9999px; top: -9999px;
+      background: var(--accent); color: #fff; padding: 0.5rem 1rem;
+      font-size: 0.875rem; font-weight: 600; border-radius: 0 0 8px 0; z-index: 9999;
+    }
+    .skip-nav:focus { left: 0; top: 0; }
 
     @media (max-width: 520px) {
       header { padding: 0 1rem; }
@@ -322,12 +339,15 @@
 </head>
 <body>
 
+  <noscript><div style="font-family:sans-serif;text-align:center;padding:3rem;background:#1d1d1f;color:#fff;min-height:100vh;">JavaScript is required to use the ETCC Dashboard. Please enable it in your browser settings.</div></noscript>
+  <a href="#main-content" class="skip-nav">Skip to main content</a>
+
   <!-- Header -->
-  <header>
+  <header role="banner">
     <button class="hamburger" id="menuBtn" aria-label="Open menu">
       <span></span><span></span><span></span>
     </button>
-    <img src="ETCClogo.png" alt="ETCC Logo" />
+    <img src="ETCClogo.png" alt="ETCC Logo" width="52" height="52" />
     <div class="header-text">
       <span class="header-title">East Tennessee Corvette Club</span>
       <span class="header-sub">Member Apps</span>
@@ -340,11 +360,11 @@
   <div class="layout">
 
     <!-- Sidebar -->
-    <nav class="sidebar" id="sidebar">
-      <a class="nav-item active" id="nav-home" href="#" onclick="showPage('home'); return false;">
+    <nav class="sidebar" id="sidebar" aria-label="Main navigation" aria-hidden="true">
+      <button class="nav-item active" id="nav-home" onclick="showPage('home')">
         <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
         Dashboard
-      </a>
+      </button>
       <hr class="nav-divider" />
       <button class="nav-item" id="nav-settings" onclick="promptPassword()">
         <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
@@ -353,25 +373,25 @@
     </nav>
 
     <!-- Main content -->
-    <div class="main-content">
+    <main class="main-content" id="main-content">
 
       <!-- Dashboard Page -->
       <div class="page active" id="page-home">
         <div class="hero">
-          <img class="hero-logo" src="ETCClogo.png" alt="ETCC Logo" />
-          <h1>Welcome to <span>ETCC Apps</span></h1>
+          <img class="hero-logo" src="ETCClogo.png" alt="ETCC Logo" width="110" height="110" />
+          <h1>Welcome to the <span>ETCC Dashboard</span></h1>
           <p>Your central hub for East Tennessee Corvette Club member tools and resources.</p>
         </div>
         <div class="app-section">
           <div class="app-grid">
-            <a class="app-card" href="https://etccapps.com/apps/sam">
-              <div class="card-icon red">🏆</div>
-              <div class="card-name">Silent Auction Manager</div>
+            <div class="app-card" role="button" tabindex="0" data-url="https://etccapps.com/apps/sam" onclick="promptPassword('sam')" onkeydown="if(event.key==='Enter'||event.key===' ')promptPassword('sam')" aria-label="Open Silent Auction Manager (SAM)">
+              <div class="card-icon red">&#x1F3C6;</div>
+              <div class="card-name">Silent Auction Manager (SAM)</div>
               <div class="card-desc">Manage auction items, bidding, winner announcements, and post-auction pickup.</div>
               <span class="card-badge badge-live">Live</span>
-            </a>
-            <div class="app-card coming-soon">
-              <div class="card-icon blue">👥</div>
+            </div>
+            <div class="app-card coming-soon" aria-disabled="true" tabindex="-1">
+              <div class="card-icon blue">&#x1F4A5;</div>
               <div class="card-name">Other Apps Coming Soon ...</div>
               <div class="card-desc">Additional member tools and resources are under development.</div>
               <span class="card-badge badge-soon">Coming Soon</span>
@@ -385,6 +405,32 @@
         <div class="settings-section">
           <div class="settings-title">Settings</div>
           <div class="settings-sub">Administrative tools and configuration.</div>
+
+          <div class="settings-card">
+            <h2>Dashboard Admin Password</h2>
+            <p>Change the password required to access Settings.</p>
+            <div style="display:flex;flex-direction:column;gap:0.6rem;max-width:320px;margin-top:0.75rem;">
+              <label for="adminPwNew" style="font-size:0.8rem;font-weight:600;color:var(--text-sec);">New Password</label>
+              <input type="password" id="adminPwNew" placeholder="New admin password" style="padding:0.5rem 0.75rem;border:1px solid var(--border);border-radius:8px;font-size:0.9rem;" autocomplete="new-password" />
+              <label for="adminPwConfirm" style="font-size:0.8rem;font-weight:600;color:var(--text-sec);">Confirm Password</label>
+              <input type="password" id="adminPwConfirm" placeholder="Confirm new password" style="padding:0.5rem 0.75rem;border:1px solid var(--border);border-radius:8px;font-size:0.9rem;" autocomplete="new-password" />
+              <div id="adminPwMsg" style="font-size:0.85rem;min-height:1.2em;"></div>
+              <button class="btn" onclick="changeAdminPassword()" style="align-self:flex-start;">Update Admin Password</button>
+            </div>
+          </div>
+
+          <div class="settings-card">
+            <h2>SAM Password</h2>
+            <p>Change the password required to launch Silent Auction Manager.</p>
+            <div style="display:flex;flex-direction:column;gap:0.6rem;max-width:320px;margin-top:0.75rem;">
+              <label for="samPwNew" style="font-size:0.8rem;font-weight:600;color:var(--text-sec);">New Password</label>
+              <input type="password" id="samPwNew" placeholder="New SAM password" style="padding:0.5rem 0.75rem;border:1px solid var(--border);border-radius:8px;font-size:0.9rem;" autocomplete="new-password" />
+              <label for="samPwConfirm" style="font-size:0.8rem;font-weight:600;color:var(--text-sec);">Confirm Password</label>
+              <input type="password" id="samPwConfirm" placeholder="Confirm new password" style="padding:0.5rem 0.75rem;border:1px solid var(--border);border-radius:8px;font-size:0.9rem;" autocomplete="new-password" />
+              <div id="samPwMsg" style="font-size:0.85rem;min-height:1.2em;"></div>
+              <button class="btn" onclick="changeSamPassword()" style="align-self:flex-start;">Update SAM Password</button>
+            </div>
+          </div>
 
           <div class="settings-card">
             <h2>Regression Test</h2>
@@ -406,23 +452,26 @@
         </div>
       </div>
 
-    </div><!-- /main-content -->
+    </main>
   </div><!-- /layout -->
 
   <!-- Footer -->
-  <footer>
-    &copy; 2026 East Tennessee Corvette Club &mdash; <a href="https://etccapps.com">etccapps.com</a>
+  <footer role="contentinfo">
+    <div>&copy; 2026 East Tennessee Corvette Club &middot; Knoxville, TN &middot; <a href="mailto:etccwebsite.webmanager@gmail.com">etccwebsite.webmanager@gmail.com</a></div>
+    <div>Website by East Tennessee Web Services &middot; <a href="mailto:easttnwebservices@yahoo.com">easttnwebservices@yahoo.com</a></div>
+    <div style="margin-top:0.4rem;opacity:0.6;font-size:0.72rem;">Version: 1.16 &nbsp;&middot;&nbsp; Date: <time datetime="2026-06-20">Jun 20, 2026 7:08 AM</time></div>
   </footer>
 
   <!-- Password Modal -->
-  <div class="modal-backdrop" id="pwModal">
+  <div class="modal-backdrop" id="pwModal" role="dialog" aria-modal="true" aria-labelledby="pwModalTitle" aria-describedby="pwModalSubtitle">
     <div class="modal">
       <h2>
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="vertical-align:-2px;margin-right:6px"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-        Settings Access
+        <span id="pwModalTitle">Settings Access</span>
       </h2>
-      <p>Enter the password to access Settings.</p>
-      <input type="password" id="pwInput" placeholder="Password" onkeydown="if(event.key==='Enter') checkPassword()" />
+      <p id="pwModalSubtitle">Enter the password to access Settings.</p>
+      <label for="pwInput" class="sr-only">Password</label>
+      <input type="password" id="pwInput" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter') checkPassword()" />
       <div class="modal-error" id="pwError"></div>
       <div class="modal-actions">
         <button class="btn-cancel" onclick="closeModal()">Cancel</button>
@@ -432,9 +481,31 @@
   </div>
 
   <script>
-    const SETTINGS_PW = 'sdjk54580ssd;$^%$()*';
+    const SETTINGS_PW_HASH_DEFAULT = '7cf38cd182554a5dabed12ff150c91ab961e36ab9eea0de171cdd3be110b8460';
+    const SAM_PW_HASH_DEFAULT      = 'fa1e378cedb35dc0cf875cbf44176bbbb230cca283fc083bed59247a739f0646';
+    const HEX64 = /^[0-9a-f]{64}$/;
+    function lsGet(key) { try { return localStorage.getItem(key); } catch(e) { return null; } }
+    function lsSet(key, val) { try { localStorage.setItem(key, val); } catch(e) {} }
+    function validHash(h) { return h && HEX64.test(h); }
+    const _sh = lsGet('etcc_settings_pw_hash'); let SETTINGS_PW_HASH = validHash(_sh) ? _sh : SETTINGS_PW_HASH_DEFAULT;
+    const _ah = lsGet('etcc_sam_pw_hash');      let SAM_PW_HASH      = validHash(_ah) ? _ah : SAM_PW_HASH_DEFAULT;
 
-    // ── Sidebar toggle ──
+    function ssGet(key) { try { return sessionStorage.getItem(key); } catch(e) { return null; } }
+    function ssSet(key, val) { try { sessionStorage.setItem(key, val); } catch(e) {} }
+    function safeLockTime(val) { const n = parseInt(val || '0', 10); return (Number.isFinite(n) && n > 0) ? n : 0; }
+
+    const _lock = {
+      settings: { failCount: 0, until: safeLockTime(ssGet('etcc_lock_settings')) },
+      sam:      { failCount: 0, until: safeLockTime(ssGet('etcc_lock_sam')) }
+    };
+    let _countdownTimer = null;
+    async function hashPassword(pw) {
+      if (!crypto || !crypto.subtle) return null; // requires HTTPS - enforced by .htaccess
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+    }
+
+    // -- Sidebar toggle --
     const sidebar  = document.getElementById('sidebar');
     const overlay  = document.getElementById('overlay');
     const menuBtn  = document.getElementById('menuBtn');
@@ -442,14 +513,18 @@
     menuBtn.addEventListener('click', () => {
       const open = sidebar.classList.toggle('open');
       overlay.classList.toggle('open', open);
+      menuBtn.setAttribute('aria-expanded', String(open));
+      sidebar.setAttribute('aria-hidden', String(!open));
     });
     overlay.addEventListener('click', closeSidebar);
     function closeSidebar() {
       sidebar.classList.remove('open');
       overlay.classList.remove('open');
+      menuBtn.setAttribute('aria-expanded', 'false');
+      sidebar.setAttribute('aria-hidden', 'true');
     }
 
-    // ── Page navigation ──
+    // -- Page navigation --
     function showPage(name) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -458,33 +533,167 @@
       closeSidebar();
     }
 
-    // ── Password modal ──
-    function promptPassword() {
+    // -- Password modal --
+    let pendingAction = 'settings';
+
+    function promptPassword(action) {
+      pendingAction = (action === 'sam' || action === 'settings') ? action : 'settings';
+      const titleEl    = document.getElementById('pwModalTitle');
+      const subtitleEl = document.getElementById('pwModalSubtitle');
+      if (pendingAction === 'sam') {
+        titleEl.textContent    = 'Member Access';
+        subtitleEl.textContent = 'Enter the password to launch Silent Auction Manager.';
+      } else {
+        titleEl.textContent    = 'Settings Access';
+        subtitleEl.textContent = 'Enter the password to access Settings.';
+      }
       document.getElementById('pwInput').value = '';
-      document.getElementById('pwError').textContent = '';
+      const errEl = document.getElementById('pwError');
+      const st = _lock[pendingAction];
+      const now = Date.now();
+      if (now < st.until) {
+        const secs = Math.ceil((st.until - now) / 1000);
+        errEl.textContent = `Too many attempts. Try again in ${secs}s.`;
+        startCountdown(errEl);
+      } else {
+        errEl.textContent = '';
+      }
       document.getElementById('pwModal').classList.add('open');
       setTimeout(() => document.getElementById('pwInput').focus(), 50);
     }
 
-    function closeModal() {
-      document.getElementById('pwModal').classList.remove('open');
+    function startCountdown(errEl) {
+      clearInterval(_countdownTimer);
+      const st = _lock[pendingAction];
+      _countdownTimer = setInterval(() => {
+        const remaining = st.until - Date.now();
+        if (remaining <= 0) {
+          clearInterval(_countdownTimer);
+          st.failCount = 0;
+          errEl.textContent = '';
+        } else {
+          errEl.textContent = `Too many attempts. Try again in ${Math.ceil(remaining / 1000)}s.`;
+        }
+      }, 500);
     }
 
-    function checkPassword() {
+    function closeModal() {
+      clearInterval(_countdownTimer);
+      document.getElementById('pwModal').classList.remove('open');
+      document.getElementById('pwError').textContent = '';
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { closeModal(); return; }
+      const modal = document.getElementById('pwModal');
+      if (!modal.classList.contains('open') || e.key !== 'Tab') return;
+      const focusable = Array.from(modal.querySelectorAll('input, button'));
+      if (!focusable.length) return;
+      const first = focusable[0], last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault(); last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault(); first.focus();
+      }
+    });
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        const modal = document.getElementById('pwModal');
+        if (!modal.classList.contains('open')) return;
+        const errEl = document.getElementById('pwError');
+        const st = _lock[pendingAction];
+        const remaining = st.until - Date.now();
+        if (remaining > 0) {
+          errEl.textContent = `Too many attempts. Try again in ${Math.ceil(remaining / 1000)}s.`;
+          startCountdown(errEl);
+        } else if (st.failCount >= 5) {
+          st.failCount = 0;
+          errEl.textContent = '';
+        }
+      }
+    });
+
+    async function checkPassword() {
+      const errEl = document.getElementById('pwError');
+      const st = _lock[pendingAction];
+      const now = Date.now();
+      if (now < st.until) {
+        const secs = Math.ceil((st.until - now) / 1000);
+        errEl.textContent = `Too many attempts. Try again in ${secs}s.`;
+        return;
+      }
       const val = document.getElementById('pwInput').value;
-      if (val === SETTINGS_PW) {
+      const hash = await hashPassword(val);
+      if (hash === null) {
+        errEl.textContent = 'A secure (HTTPS) connection is required.';
+        return;
+      }
+      const expectedHash = pendingAction === 'sam' ? SAM_PW_HASH : SETTINGS_PW_HASH;
+      if (hash === expectedHash) {
+        st.failCount = 0;
+        st.until = 0;
+        ssSet('etcc_lock_' + pendingAction, '0');
         closeModal();
-        showPage('settings');
-        document.getElementById('nav-settings').classList.add('active');
-        document.getElementById('nav-home').classList.remove('active');
+        if (pendingAction === 'sam') {
+          window.location.href = 'https://etccapps.com/apps/sam';
+        } else {
+          showPage('settings');
+        }
       } else {
-        document.getElementById('pwError').textContent = 'Incorrect password. Please try again.';
+        st.failCount++;
+        if (st.failCount >= 5) {
+          st.until = Date.now() + 30000;
+          ssSet('etcc_lock_' + pendingAction, String(st.until));
+          errEl.textContent = 'Too many attempts. Locked for 30 seconds.';
+          startCountdown(errEl);
+        } else {
+          errEl.textContent = `Incorrect password. ${5 - st.failCount} attempt${5 - st.failCount === 1 ? '' : 's'} remaining.`;
+        }
         document.getElementById('pwInput').value = '';
         document.getElementById('pwInput').focus();
       }
     }
 
-    // ── Regression tests ──
+    // ── Admin password change ──
+    async function changeAdminPassword() {
+      const newPw   = document.getElementById('adminPwNew').value;
+      const confirm = document.getElementById('adminPwConfirm').value;
+      const msg     = document.getElementById('adminPwMsg');
+      if (!newPw) { msg.style.color = 'var(--danger)'; msg.textContent = 'Please enter a new password.'; return; }
+      if (newPw.length < 8) { msg.style.color = 'var(--danger)'; msg.textContent = 'Password must be at least 8 characters.'; return; }
+      if (newPw !== confirm) { msg.style.color = 'var(--danger)'; msg.textContent = 'Passwords do not match.'; return; }
+      const hash = await hashPassword(newPw);
+      if (!hash) { msg.style.color = 'var(--danger)'; msg.textContent = 'Requires a secure (HTTPS) connection.'; return; }
+      SETTINGS_PW_HASH = hash;
+      lsSet('etcc_settings_pw_hash', hash);
+      document.getElementById('adminPwNew').value = '';
+      document.getElementById('adminPwConfirm').value = '';
+      msg.style.color = 'var(--success)';
+      msg.textContent = 'Admin password updated and saved.';
+      setTimeout(() => { msg.textContent = ''; }, 4000);
+    }
+
+    // ── SAM password change ──
+    async function changeSamPassword() {
+      const newPw   = document.getElementById('samPwNew').value;
+      const confirm = document.getElementById('samPwConfirm').value;
+      const msg     = document.getElementById('samPwMsg');
+      if (!newPw) { msg.style.color = 'var(--danger)'; msg.textContent = 'Please enter a new password.'; return; }
+      if (newPw.length < 8) { msg.style.color = 'var(--danger)'; msg.textContent = 'Password must be at least 8 characters.'; return; }
+      if (newPw !== confirm) { msg.style.color = 'var(--danger)'; msg.textContent = 'Passwords do not match.'; return; }
+      const hash = await hashPassword(newPw);
+      if (!hash) { msg.style.color = 'var(--danger)'; msg.textContent = 'Requires a secure (HTTPS) connection.'; return; }
+      SAM_PW_HASH = hash;
+      lsSet('etcc_sam_pw_hash', hash);
+      document.getElementById('samPwNew').value = '';
+      document.getElementById('samPwConfirm').value = '';
+      msg.style.color = 'var(--success)';
+      msg.textContent = 'SAM password updated and saved.';
+      setTimeout(() => { msg.textContent = ''; }, 4000);
+    }
+
+    // -- Regression tests --
     function runRegressionTest() {
       const doc = document;
 
@@ -495,14 +704,14 @@
           fn: () => !!doc.querySelector('header img[src*="ETCClogo"]') },
         { name: 'Header title correct',
           fn: () => { const el = doc.querySelector('.header-title'); return !!el && el.textContent.includes('East Tennessee Corvette Club'); } },
-        { name: 'Hero heading contains ETCC Apps',
-          fn: () => { const el = doc.querySelector('.hero h1'); return !!el && el.textContent.includes('ETCC Apps'); } },
+        { name: 'Hero heading contains ETCC Dashboard',
+          fn: () => { const el = doc.querySelector('.hero h1'); return !!el && el.textContent.includes('ETCC Dashboard'); } },
         { name: 'Hero logo present',
           fn: () => !!doc.querySelector('.hero-logo') },
-        { name: 'Silent Auction Manager card present',
-          fn: () => { const cards = Array.from(doc.querySelectorAll('.card-name')); return !!cards.find(c => c.textContent.includes('Silent Auction Manager')); } },
-        { name: 'SAM links to etccapps.com/apps/sam',
-          fn: () => { const a = doc.querySelector('a.app-card'); return !!a && a.href.includes('etccapps.com/apps/sam'); } },
+        { name: 'Silent Auction Manager (SAM) card present',
+          fn: () => { const cards = Array.from(doc.querySelectorAll('.card-name')); return !!cards.find(c => c.textContent.includes('Silent Auction Manager (SAM)')); } },
+        { name: 'SAM card has data-url pointing to etccapps.com/apps/sam',
+          fn: () => { const card = Array.from(doc.querySelectorAll('.app-card')).find(el => el.dataset.url?.includes('etccapps.com/apps/sam')); return !!card; } },
         { name: 'Live badge present',
           fn: () => !!doc.querySelector('.badge-live') },
         { name: 'Coming Soon card present',
@@ -511,8 +720,8 @@
           fn: () => { const b = doc.querySelector('.badge-soon'); return !!b && b.textContent.includes('Coming Soon'); } },
         { name: 'Other Apps Coming Soon text present',
           fn: () => { const cards = Array.from(doc.querySelectorAll('.card-name')); return !!cards.find(c => c.textContent.includes('Other Apps Coming Soon')); } },
-        { name: 'Footer contains etccapps.com',
-          fn: () => { const f = doc.querySelector('footer'); return !!f && f.textContent.includes('etccapps.com'); } },
+        { name: 'Footer contains club email',
+          fn: () => { const f = doc.querySelector('footer'); return !!f && f.textContent.includes('etccwebsite.webmanager@gmail.com'); } },
         { name: 'Footer copyright 2026',
           fn: () => { const f = doc.querySelector('footer'); return !!f && f.textContent.includes('2026'); } },
         { name: 'Settings nav item present',

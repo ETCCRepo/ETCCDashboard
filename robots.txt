@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /apps/dashboard/test.html
+
+Sitemap: https://etccapps.com/sitemap.xml

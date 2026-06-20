@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>ETCC Dashboard — Regression Tests</title>
+  <meta name="robots" content="noindex, nofollow" />
   <style>
     body { font-family: -apple-system, sans-serif; background: #f5f5f7; color: #1d1d1f; padding: 2rem; }
     h1 { font-size: 1.4rem; margin-bottom: 0.4rem; }
@@ -60,22 +61,22 @@
         name: 'Hero heading contains ETCC Apps',
         fn: doc => {
           const el = doc.querySelector('.hero h1');
-          return { pass: !!el && el.textContent.includes('ETCC Apps'), detail: el ? el.textContent.trim() : 'not found' };
+          return { pass: !!el && el.textContent.includes('ETCC Dashboard'), detail: el ? el.textContent.trim() : 'not found' };
         }
       },
       {
         name: 'Silent Auction Manager card present',
         fn: doc => {
           const cards = Array.from(doc.querySelectorAll('.card-name'));
-          const found = cards.find(c => c.textContent.includes('Silent Auction Manager'));
+          const found = cards.find(c => c.textContent.includes('Silent Auction Manager (SAM)'));
           return { pass: !!found, detail: found ? found.textContent.trim() : 'not found' };
         }
       },
       {
-        name: 'SAM card links to etccapps.com/apps/sam',
+        name: 'SAM card has data-url pointing to etccapps.com/apps/sam',
         fn: doc => {
-          const a = doc.querySelector('a.app-card');
-          return { pass: !!a && a.getAttribute('href')?.includes('etccapps.com/apps/sam'), detail: a ? a.getAttribute('href') : 'not found' };
+          const card = Array.from(doc.querySelectorAll('.app-card')).find(el => el.dataset.url?.includes('etccapps.com/apps/sam'));
+          return { pass: !!card, detail: card ? card.dataset.url : 'not found' };
         }
       },
       {
@@ -100,10 +101,10 @@
         }
       },
       {
-        name: 'Footer contains etccapps.com',
+        name: 'Footer contains club email',
         fn: doc => {
           const f = doc.querySelector('footer');
-          return { pass: !!f && f.textContent.includes('etccapps.com'), detail: f ? f.textContent.trim().substring(0, 60) : 'not found' };
+          return { pass: !!f && f.textContent.includes('etccwebsite.webmanager@gmail.com'), detail: f ? f.textContent.trim().substring(0, 60) : 'not found' };
         }
       },
       {
@@ -132,6 +133,75 @@
         fn: doc => {
           const btn = doc.querySelector('#page-settings .btn');
           return { pass: !!btn && btn.textContent.includes('Regression'), detail: btn ? btn.textContent.trim() : 'not found' };
+        }
+      },
+      {
+        name: 'Favicon .ico link present',
+        fn: doc => {
+          const link = Array.from(doc.querySelectorAll('link[rel="icon"]')).find(l => l.getAttribute('href')?.includes('favicon.ico'));
+          return { pass: !!link, detail: link ? link.getAttribute('href') : 'not found' };
+        }
+      },
+      {
+        name: 'Header has role="banner"',
+        fn: doc => {
+          const el = doc.querySelector('header[role="banner"]');
+          return { pass: !!el, detail: el ? 'found' : 'not found' };
+        }
+      },
+      {
+        name: 'Main landmark present',
+        fn: doc => {
+          const el = doc.querySelector('main');
+          return { pass: !!el, detail: el ? el.tagName.toLowerCase() : 'not found' };
+        }
+      },
+      {
+        name: 'Footer has role="contentinfo"',
+        fn: doc => {
+          const el = doc.querySelector('footer[role="contentinfo"]');
+          return { pass: !!el, detail: el ? 'found' : 'not found' };
+        }
+      },
+      {
+        name: 'Password modal has ARIA dialog attributes',
+        fn: doc => {
+          const el = doc.getElementById('pwModal');
+          const hasRole  = el?.getAttribute('role') === 'dialog';
+          const hasModal = el?.getAttribute('aria-modal') === 'true';
+          return { pass: !!el && hasRole && hasModal, detail: el ? `role=${el.getAttribute('role')} aria-modal=${el.getAttribute('aria-modal')}` : 'not found' };
+        }
+      },
+      {
+        name: 'Footer version line contains <time> element',
+        fn: doc => {
+          const t = doc.querySelector('footer time');
+          return { pass: !!t && !!t.getAttribute('datetime'), detail: t ? `datetime=${t.getAttribute('datetime')} text=${t.textContent.trim()}` : 'not found' };
+        }
+      },
+      {
+        name: 'Skip-nav link present',
+        fn: doc => {
+          const el = doc.querySelector('a.skip-nav, a[href="#main-content"]');
+          return { pass: !!el, detail: el ? el.textContent.trim() : 'not found' };
+        }
+      },
+      {
+        name: 'SAM card emoji not corrupted (trophy \u{1F3C6})',
+        fn: doc => {
+          const el = doc.querySelector('.card-icon.red');
+          const text = el ? el.textContent.trim() : '';
+          const pass = text === '\u{1F3C6}' && !text.includes('ð');
+          return { pass, detail: el ? `codepoints: ${[...text].map(c => 'U+' + c.codePointAt(0).toString(16).toUpperCase()).join(' ')}` : 'element not found' };
+        }
+      },
+      {
+        name: 'Coming Soon card emoji not corrupted (boom \u{1F4A5})',
+        fn: doc => {
+          const el = doc.querySelector('.card-icon.blue');
+          const text = el ? el.textContent.trim() : '';
+          const pass = text === '\u{1F4A5}' && !text.includes('ð');
+          return { pass, detail: el ? `codepoints: ${[...text].map(c => 'U+' + c.codePointAt(0).toString(16).toUpperCase()).join(' ')}` : 'element not found' };
         }
       }
     ];
