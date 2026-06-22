@@ -80,6 +80,23 @@
         }
       },
       {
+        name: 'SAM card navigates directly (no password prompt)',
+        fn: doc => {
+          const card = Array.from(doc.querySelectorAll('.app-card')).find(el => el.dataset.url?.includes('etccapps.com/apps/sam'));
+          const onclick = card ? card.getAttribute('onclick') : '';
+          const direct = !!onclick && onclick.includes('location.href') && !onclick.includes('promptPassword');
+          return { pass: direct, detail: onclick || 'not found' };
+        }
+      },
+      {
+        name: 'SAM password card not present in Settings',
+        fn: doc => {
+          const cards = Array.from(doc.querySelectorAll('#page-settings .settings-card h2'));
+          const found = cards.find(h => h.textContent.includes('SAM Password'));
+          return { pass: !found, detail: found ? 'SAM Password card found (should be removed)' : 'correctly absent' };
+        }
+      },
+      {
         name: 'Live badge present on SAM card',
         fn: doc => {
           const badge = doc.querySelector('.badge-live');
@@ -206,7 +223,7 @@
       }
     ];
 
-    fetch('index.html')
+    fetch('https://etccapps.com/apps/dashboard/index.html')
       .then(r => r.text())
       .then(html => {
         const doc = new DOMParser().parseFromString(html, 'text/html');

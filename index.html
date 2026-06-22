@@ -384,7 +384,7 @@
         </div>
         <div class="app-section">
           <div class="app-grid">
-            <div class="app-card" role="button" tabindex="0" data-url="https://etccapps.com/apps/sam" onclick="promptPassword('sam')" onkeydown="if(event.key==='Enter'||event.key===' ')promptPassword('sam')" aria-label="Open Silent Auction Manager (SAM)">
+            <div class="app-card" role="button" tabindex="0" data-url="https://etccapps.com/apps/sam" onclick="window.location.href='https://etccapps.com/apps/sam'" onkeydown="if(event.key==='Enter'||event.key===' ')window.location.href='https://etccapps.com/apps/sam'" aria-label="Open Silent Auction Manager (SAM)">
               <div class="card-icon red">&#x1F3C6;</div>
               <div class="card-name">Silent Auction Manager (SAM)</div>
               <div class="card-desc">Manage auction items, bidding, winner announcements, and post-auction pickup.</div>
@@ -420,19 +420,6 @@
           </div>
 
           <div class="settings-card">
-            <h2>SAM Password</h2>
-            <p>Change the password required to launch Silent Auction Manager.</p>
-            <div style="display:flex;flex-direction:column;gap:0.6rem;max-width:320px;margin-top:0.75rem;">
-              <label for="samPwNew" style="font-size:0.8rem;font-weight:600;color:var(--text-sec);">New Password</label>
-              <input type="password" id="samPwNew" placeholder="New SAM password" style="padding:0.5rem 0.75rem;border:1px solid var(--border);border-radius:8px;font-size:0.9rem;" autocomplete="new-password" />
-              <label for="samPwConfirm" style="font-size:0.8rem;font-weight:600;color:var(--text-sec);">Confirm Password</label>
-              <input type="password" id="samPwConfirm" placeholder="Confirm new password" style="padding:0.5rem 0.75rem;border:1px solid var(--border);border-radius:8px;font-size:0.9rem;" autocomplete="new-password" />
-              <div id="samPwMsg" style="font-size:0.85rem;min-height:1.2em;"></div>
-              <button class="btn" onclick="changeSamPassword()" style="align-self:flex-start;">Update SAM Password</button>
-            </div>
-          </div>
-
-          <div class="settings-card">
             <h2>Regression Test</h2>
             <p>Verify that all key dashboard elements are present and functioning correctly.</p>
             <button class="btn" onclick="runRegressionTest()">
@@ -459,7 +446,7 @@
   <footer role="contentinfo">
     <div>&copy; 2026 East Tennessee Corvette Club &middot; Knoxville, TN &middot; <a href="mailto:etccwebsite.webmanager@gmail.com">etccwebsite.webmanager@gmail.com</a></div>
     <div>Website by East Tennessee Web Services &middot; <a href="mailto:easttnwebservices@yahoo.com">easttnwebservices@yahoo.com</a></div>
-    <div style="margin-top:0.4rem;opacity:0.6;font-size:0.72rem;">Version: 1.16 &nbsp;&middot;&nbsp; Date: <time datetime="2026-06-20">Jun 20, 2026 7:08 AM</time></div>
+    <div style="margin-top:0.4rem;opacity:0.6;font-size:0.72rem;">Version: 1.17 &nbsp;&middot;&nbsp; Date: <time datetime="2026-06-22">Jun 22, 2026 10:19 AM</time></div>
   </footer>
 
   <!-- Password Modal -->
@@ -482,21 +469,18 @@
 
   <script>
     const SETTINGS_PW_HASH_DEFAULT = '7cf38cd182554a5dabed12ff150c91ab961e36ab9eea0de171cdd3be110b8460';
-    const SAM_PW_HASH_DEFAULT      = 'fa1e378cedb35dc0cf875cbf44176bbbb230cca283fc083bed59247a739f0646';
     const HEX64 = /^[0-9a-f]{64}$/;
     function lsGet(key) { try { return localStorage.getItem(key); } catch(e) { return null; } }
     function lsSet(key, val) { try { localStorage.setItem(key, val); } catch(e) {} }
     function validHash(h) { return h && HEX64.test(h); }
     const _sh = lsGet('etcc_settings_pw_hash'); let SETTINGS_PW_HASH = validHash(_sh) ? _sh : SETTINGS_PW_HASH_DEFAULT;
-    const _ah = lsGet('etcc_sam_pw_hash');      let SAM_PW_HASH      = validHash(_ah) ? _ah : SAM_PW_HASH_DEFAULT;
 
     function ssGet(key) { try { return sessionStorage.getItem(key); } catch(e) { return null; } }
     function ssSet(key, val) { try { sessionStorage.setItem(key, val); } catch(e) {} }
     function safeLockTime(val) { const n = parseInt(val || '0', 10); return (Number.isFinite(n) && n > 0) ? n : 0; }
 
     const _lock = {
-      settings: { failCount: 0, until: safeLockTime(ssGet('etcc_lock_settings')) },
-      sam:      { failCount: 0, until: safeLockTime(ssGet('etcc_lock_sam')) }
+      settings: { failCount: 0, until: safeLockTime(ssGet('etcc_lock_settings')) }
     };
     let _countdownTimer = null;
     async function hashPassword(pw) {
@@ -629,17 +613,13 @@
         errEl.textContent = 'A secure (HTTPS) connection is required.';
         return;
       }
-      const expectedHash = pendingAction === 'sam' ? SAM_PW_HASH : SETTINGS_PW_HASH;
+      const expectedHash = SETTINGS_PW_HASH;
       if (hash === expectedHash) {
         st.failCount = 0;
         st.until = 0;
-        ssSet('etcc_lock_' + pendingAction, '0');
+        ssSet('etcc_lock_settings', '0');
         closeModal();
-        if (pendingAction === 'sam') {
-          window.location.href = 'https://etccapps.com/apps/sam';
-        } else {
-          showPage('settings');
-        }
+        showPage('settings');
       } else {
         st.failCount++;
         if (st.failCount >= 5) {
@@ -674,24 +654,6 @@
       setTimeout(() => { msg.textContent = ''; }, 4000);
     }
 
-    // ── SAM password change ──
-    async function changeSamPassword() {
-      const newPw   = document.getElementById('samPwNew').value;
-      const confirm = document.getElementById('samPwConfirm').value;
-      const msg     = document.getElementById('samPwMsg');
-      if (!newPw) { msg.style.color = 'var(--danger)'; msg.textContent = 'Please enter a new password.'; return; }
-      if (newPw.length < 8) { msg.style.color = 'var(--danger)'; msg.textContent = 'Password must be at least 8 characters.'; return; }
-      if (newPw !== confirm) { msg.style.color = 'var(--danger)'; msg.textContent = 'Passwords do not match.'; return; }
-      const hash = await hashPassword(newPw);
-      if (!hash) { msg.style.color = 'var(--danger)'; msg.textContent = 'Requires a secure (HTTPS) connection.'; return; }
-      SAM_PW_HASH = hash;
-      lsSet('etcc_sam_pw_hash', hash);
-      document.getElementById('samPwNew').value = '';
-      document.getElementById('samPwConfirm').value = '';
-      msg.style.color = 'var(--success)';
-      msg.textContent = 'SAM password updated and saved.';
-      setTimeout(() => { msg.textContent = ''; }, 4000);
-    }
 
     // -- Regression tests --
     function runRegressionTest() {

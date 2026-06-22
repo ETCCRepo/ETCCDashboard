@@ -74,6 +74,7 @@ $dashboardFiles = @(
 # Files deployed to root account (public_html/)
 $rootFiles = @(
     @{ local="htaccess-root/.htaccess"; remote="domains/etccapps.com/public_html/.htaccess" },
+    @{ local="test.html";               remote="domains/etccapps.com/public_html/test.html" },
     @{ local="robots.txt";              remote="domains/etccapps.com/public_html/robots.txt" },
     @{ local="sitemap.xml";             remote="domains/etccapps.com/public_html/sitemap.xml" }
 )
@@ -90,4 +91,6 @@ if ($File) {
 }
 
 Write-Host ""
-Write-Host "Deploy complete. Live at: https://dashboard.etccapps.com/"
+Write-Host "Deploy complete."
+Write-Host "  https://etccapps.com"
+Write-Host "  https://dashboard.etccapps.com/"
